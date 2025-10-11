@@ -1,0 +1,121 @@
+/* Global reset for full width */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.home-container {
+  /* Avoid forcing full viewport height to remove extra space before footer */
+  min-height: auto;
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  width: 100%;
+}
+
+.page-title {
+  text-align: center;
+  /* Reduce bottom spacing under title */
+  margin-bottom: 1.5rem;
+  /* Push the title further down */
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+  color: #1e40af;
+}
+
+.page-title h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.page-title p {
+  font-size: 1.2rem;
+  color: #64748b;
+}
+
+.request-ticket-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Role selection buttons container */
+.home-role-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  max-width: 600px;
+  /* Reduce top margin above the buttons */
+  margin: 1rem auto 0 auto;
+}
+
+/* Role buttons */
+.role-btn {
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.06s ease-in-out, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.role-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+.role-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.role-btn.customer {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.role-btn.employee {
+  background: linear-gradient(135deg, #eb8b25, #eb8b25);
+}
+
+@media (max-width: 600px) {
+  .home-role-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-container .main-content {
+  flex: 0 0 auto;
+  padding-bottom: 20rem;
+}
+

@@ -1,0 +1,12 @@
+.footer-se {
+  background: #374151;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+.footer-se p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
