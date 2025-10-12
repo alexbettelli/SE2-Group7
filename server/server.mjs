@@ -86,8 +86,6 @@ app.get('/api/counters', async (req, res) => {
   }
 })
 
-
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
 });
