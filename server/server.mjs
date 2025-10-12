@@ -7,6 +7,10 @@ import { getServices } from './dao/serviceDAO.mjs';
 import { InternalServerError } from './models/errors.mjs';
 import morgan from 'morgan';
 import passport from 'passport';
+import {
+    getAllCounters
+} from './dao.mjs';
+
 
 const app = express();
 
@@ -20,6 +24,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
 app.use('/public', express.static('public'));
 
 const PORT = 3001;
@@ -68,6 +73,21 @@ app.post('/api/queues/:serviceID', (req, res) => {
     return res.status(200).json({ "number": ticket});
 });
 
-server.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}...`);
+
+
+//COUNTERS
+app.get('/api/counters', async (req, res) => {
+  try {
+      const counters = await getAllCounters();
+      console.log(counters);
+      res.json(counters);
+  } catch {
+      res.status(500).json({error: 'Internal server error'});
+  }
+})
+
+
+
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
 });
