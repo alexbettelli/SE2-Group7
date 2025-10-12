@@ -25,12 +25,12 @@ function App() {
           <Route path="/" element={<Layout
           />}>
             <Route index element={<HomePage 
-              services={services} 
-              ticket={ticket}
-              setTicket={setTicket}
+              setServices={setServices}
               />} 
             />
-            <Route path="customer" element={<CustomerPage />} />
+            <Route path="customer" element={<CustomerPage 
+              services={services}
+            />} />
             <Route path="employee" element={<EmployeePage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>

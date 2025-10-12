@@ -1,10 +1,24 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import '../style/Home.css';
+import {
+    getServices
+} from "../API/API.mjs";
 
-
-function HomePage () {
+function HomePage (props) {
   const navigate = useNavigate();
+
+  const { setServices } = props;
+
+  const handleCustomerPage = async () => {
+    try {
+      const services = await getServices();
+      setServices(services);
+      navigate('/customer');
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div className="home-container">
@@ -17,7 +31,7 @@ function HomePage () {
         <div className="home-role-buttons">
           <button
             className="role-btn customer"
-            onClick={() => navigate('/customer')}
+            onClick={() => handleCustomerPage()}
           >
             Customer
           </button>

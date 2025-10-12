@@ -2,10 +2,10 @@
   "name": "server",
   "version": "0.1.0",
   "description": "",
-  "main": "index.mjs",
+  "main": "server.mjs",
   "scripts": {
-    "start": "node index.mjs",
-    "dev": "nodemon index.mjs",
+    "start": "node server.mjs",
+    "dev": "nodemon server.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
