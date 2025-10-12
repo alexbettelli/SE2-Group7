@@ -6,7 +6,6 @@ import { getServices } from './dao/serviceDAO.mjs';
 import { InternalServerError } from './models/errors.mjs';
 
 const PORT = 3001;
-let lastTicket = 0;
 
 const app = express();
 const server = http.createServer(app);
@@ -47,7 +46,8 @@ app.post('/api/queues/:serviceID', (req, res) => {
     if(!queues.has(serviceID)) queues.set(serviceID, [ customerID ]);
     else queues.get(serviceID).push(customerID);
     console.log(queues);
-    return res.status(200).json({ "number": ++lastTicket});
+    const ticket = "Fake Ticket"; // Aurora, here you should implement the get ticket function
+    return res.status(200).json({ "number": ticket});
 });
 
 server.listen(PORT, () => {
