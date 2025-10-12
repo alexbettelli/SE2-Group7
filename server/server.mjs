@@ -36,6 +36,14 @@ const io = new Server(server, {
 
 io.on('connection', socket => {
     console.log(`New user: ${socket.id}`);
+
+    socket.on('disconnect', () => {
+        console.log(`Socket ${socket.id} has been disconnected. Removing it from queue!`);
+        queues.forEach((value, key) => {
+            queues.set(key, value.filter(id => id != socket.id));
+        });
+        console.log(queues);
+    })
 })
 
 const queues = new Map();
