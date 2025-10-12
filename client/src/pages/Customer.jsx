@@ -1,9 +1,8 @@
-import React from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client'
 import API from '../API/API.mjs';
-import { formatSeconds } from '../utils/utils.mjs';
+import Board from '../components/Board';
+import Ticket from '../components/Ticket';
 import '../style/Customer.css'
 
 function CustomerPage(props) {
@@ -11,6 +10,13 @@ function CustomerPage(props) {
   const [socket, setSocket] = useState(null);
   const [service, selectService] = useState(null);
   const [done, setDone] = useState(false);
+
+  const boardMock = {
+    "counter 1": "Ticket #1",
+    "counter 2": "Ticket #10",
+    "counter 3": "Ticket #20"
+  }
+
 
   useEffect(() => {
     if(done){
@@ -46,7 +52,7 @@ function CustomerPage(props) {
         { ticket === null ? 
             <ServicesContainer services={props.services} addCustomerToQueue={addCustomerToQueue}/> 
             : 
-            <ServiceHandler ticket={ticket} service={service}/> }
+            <ServiceHandler ticket={ticket} service={service} board={boardMock}/> }
       </div>
     </div>
   );
@@ -76,28 +82,9 @@ function ServiceHandler(props){
   return (
     <div className='service-handler'>
       <Ticket ticket={props.ticket} service={props.service}/>
+      <Board board={props.board}/>
     </div>
   )
-}
-
-function Ticket(props){
-  return (
-    <div className="ticket">
-      <h2>TICKET BOOKED</h2>
-      <div className="ticket-number">
-        <h4>TICKET NUMBER</h4>
-        <p>{props.ticket.number}</p>
-      </div>
-      <div className="ticket-time">
-        <h4>EXPECTED TIME</h4>
-        <p>{formatSeconds(props.service.average_time)}</p>
-      </div>
-    </div>    
-  )
-}
-
-function Board(props){
-  
 }
 
 export { CustomerPage };

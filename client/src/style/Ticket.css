@@ -1,0 +1,35 @@
+.ticket{
+  position: relative;
+  background-color: #fff;
+  border-radius: 20px;
+  width: auto;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .2);
+  max-width: 40%;
+  padding: 2rem;
+}
+
+.ticket:before{
+  position: absolute;
+  content: '';
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  width: 50px;
+  height: 50px;
+  top: 50%;
+  left: 0;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  transform: translate(-50%, -50%)
+}
+
+.ticket:after{
+  position: absolute;
+  content: '';
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  width: 50px;
+  height: 50px;
+  top: 50%;
+  right: 0;
+  transform: translate(50%, -50%);
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
