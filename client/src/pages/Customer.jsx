@@ -28,7 +28,7 @@ function CustomerPage(props) {
 
   useEffect(() => {
     if(!socket) return;
-    socket.on('connection', () => {
+    socket.on('connect', () => {
       console.log(`Connected with ID: ${socket.id}`);
     })
 
