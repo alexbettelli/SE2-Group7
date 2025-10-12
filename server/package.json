@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.mjs",
   "scripts": {
-    "start": "node index.mjs",
-    "dev": "nodemon index.mjs",
+    "start": "node server.mjs",
+    "dev": "nodemon server.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -19,6 +19,7 @@
     "morgan": "^1.10.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "socket.io": "^4.8.1",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
