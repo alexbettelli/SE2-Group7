@@ -1,0 +1,10 @@
+.board{
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+table, tr td, tr, th{
+  border-bottom: 1px solid #ccc;
+  padding: 10px 20px;
+  border-collapse: collapse;
+}

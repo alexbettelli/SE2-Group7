@@ -1,0 +1,14 @@
+###
+
+## Get Services
+GET http://localhost:3001/api/services
+
+###
+
+## Add customer to a queue
+POST http://localhost:3001/api/queues/2
+Content-Type: application/json
+
+{
+    "customerID": 9
+}
