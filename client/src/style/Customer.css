@@ -1,0 +1,6 @@
+.customer-container {
+  min-height: calc(100vh - 120px);
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  padding-bottom: 2rem;
+  width: 100%;
+}
