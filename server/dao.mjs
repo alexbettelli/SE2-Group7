@@ -1,6 +1,6 @@
 import sqlite from "sqlite3";
 import dayjs from "dayjs";
-import { Counter } from "./models.mjs"
+import { Service, Counter } from "./models.mjs"
 
 const db = new sqlite.Database("./database.db", (err) => {
     if (err) throw err;
