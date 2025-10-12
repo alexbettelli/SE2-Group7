@@ -40,7 +40,7 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
         console.log(`Socket ${socket.id} has been disconnected. Removing it from queue!`);
         queues.forEach((value, key) => {
-            queues.set(key, value.filter(id => id != socket.id));
+            queues.set(key, value.filter(user => user.socketID != socket.id));
         });
         console.log(queues);
     })
@@ -60,11 +60,11 @@ app.get('/api/services', async (req, res) => {
 app.post('/api/queues/:serviceID', (req, res) => {
     const serviceID = req.params.serviceID;
     const customerID = req.body.customerID;
-    if(customerID === undefined) return res.status(400).end();
-    if(!queues.has(serviceID)) queues.set(serviceID, [ customerID ]);
-    else queues.get(serviceID).push(customerID);
-    console.log(queues);
     const ticket = "Fake Ticket"; // Aurora, here you should implement the get ticket function
+    if(customerID === undefined) return res.status(400).end();
+    if(!queues.has(serviceID)) queues.set(serviceID, [ {"socketID": customerID, "ticket": ticket} ]);
+    else queues.get(serviceID).push({"socketID": customerID, "ticket": ticket});
+    console.log(queues);
     return res.status(200).json({ "number": ticket});
 });
 

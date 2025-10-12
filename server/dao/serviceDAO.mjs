@@ -12,7 +12,7 @@ export const getServices = () => {
             if(err) reject(err);
             const services = [];
             rows.forEach((row, idx) => {
-                services[idx] = new Service(row.id, row.tag, row.average_time);
+                services[idx] = new Service(row.id, row.tag, row.name, row.average_time);
             })
             resolve(services)
         })
