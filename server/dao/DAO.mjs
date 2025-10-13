@@ -1,31 +1,31 @@
-import sqlite from "sqlite3";
-import dayjs from "dayjs";
-import { Service, Counter } from "./models.mjs"
+import sqlite from 'sqlite3'
+import {Service, Counter} from '../models/models.mjs'
 
-const db = new sqlite.Database("./database.db", (err) => {
-    if (err) throw err;
-});
+const db = new sqlite.Database('./database.db', (err) => {
+    if(err) throw err;
+})
 
 //SERVICES
-export function getAllServices() {
+ const getAllServices = () => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM Service", (err, rows) => {
+    const query = 'SELECT * FROM Service;'
+    db.all(query, (err, rows) => {
       if(err) return reject(err);
-      resolve(rows.map(row => new Service(
+      const services = rows.map(row => new Service(
         row.id,
         row.name,
         row.tag,
         row.average_time
-      )));
+      ))
+      resolve(services);
     })
   });
 }
 
-
 // COUNTERS
 
 // TODO implement busy status based on current tickets
-export function getAllCounters() {
+const getAllCounters = () => {
   return new Promise((resolve, reject) => {
     db.all(`
       SELECT c.id, c.number, s.id as service_id, s.tag as service_tag, s.name as service_name
@@ -46,3 +46,6 @@ export function getAllCounters() {
     })
   });
 }
+
+const DAO = {getAllServices, getAllCounters}
+export default DAO;

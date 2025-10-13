@@ -3,13 +3,13 @@ import session from 'express-session';
 import http from 'http';
 import { Server } from 'socket.io'
 import cors from 'cors';
-import { getServices } from './dao/serviceDAO.mjs';
-import { InternalServerError } from './models/errors.mjs';
 import morgan from 'morgan';
 import passport from 'passport';
-import {
-    getAllCounters
-} from './dao.mjs';
+
+import { Queues } from './models/models.mjs'
+import { InternalServerError } from './models/errors.mjs';
+
+import DAO from './dao/DAO.mjs';
 
 
 const app = express();
@@ -55,7 +55,7 @@ const queues = new Map();
 
 app.get('/api/services', async (req, res) => {
     try{
-        const services = await getServices();
+        const services = await DAO.getAllServices();
         return res.status(200).json(services);
     }catch(err){
         return res.status(500).json(new InternalServerError())
@@ -63,6 +63,7 @@ app.get('/api/services', async (req, res) => {
 });
 
 app.post('/api/queues/:serviceID', (req, res) => {
+    try {
     const serviceID = req.params.serviceID;
     const customerID = req.body.customerID;
     const ticket = "Fake Ticket"; // Aurora, here you should implement the get ticket function
@@ -71,6 +72,10 @@ app.post('/api/queues/:serviceID', (req, res) => {
     else queues.get(serviceID).push({"socketID": customerID, "ticket": ticket});
     console.log(queues);
     return res.status(200).json({ "number": ticket});
+    } catch (error) {
+        return res.status(500).json(new InternalServerError())
+    }
+    
 });
 
 
@@ -78,7 +83,7 @@ app.post('/api/queues/:serviceID', (req, res) => {
 //COUNTERS
 app.get('/api/counters', async (req, res) => {
   try {
-      const counters = await getAllCounters();
+      const counters = await DAO.getAllCounters();
       console.log(counters);
       res.json(counters);
   } catch {
