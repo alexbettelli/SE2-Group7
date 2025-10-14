@@ -79,5 +79,24 @@ const getAllCounters = () => {
   });
 }
 
-const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket}
+const selectCounter = (counterId, employeeId) => {
+  return new Promise((resolve, reject) => {
+    db.run(`
+      DELETE FROM EmployeeAssignment 
+      WHERE employee_id = ?
+    `, [employeeId], (err) => {
+      if(err) return reject(err);
+
+      db.run(`
+        INSERT INTO EmployeeAssignment (employee_id, counter_id, date)
+        VALUES (?, ?, CURRENT_TIMESTAMP)
+      `, [employeeId, counterId], function(err) {
+        if(err) return reject(err);
+        resolve({ id: this.lastID, counterId, employeeId });
+      });
+    });
+  });
+}
+
+const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket, selectCounter}
 export default DAO;
