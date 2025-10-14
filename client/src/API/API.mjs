@@ -23,7 +23,6 @@ const addCustomerToQueue = async (serviceID, customerID) => {
 }
 
 
-//COUNTERS
 export const getCounters = async () => {
   try {
     const response = await fetch(`${SERVER_URL}/api/counters`, {
@@ -60,7 +59,7 @@ export const getNextTicket = async (counterId, previousTicketId) => {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
     });
-    
+
     const data = await response.json();
     if (!response.ok) throw new Error(data?.error || 'Server error');
 
@@ -80,6 +79,30 @@ export const getNextTicket = async (counterId, previousTicketId) => {
   }
 }
 
+export const selectCounter = async (counterId, employeeId) => {
+  try {
+    const response = await fetch(`${SERVER_URL}/api/counters/${counterId}/select`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ employeeId })
+    });
 
-const API = { getServices, addCustomerToQueue, getNextTicket, getCounters };
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error);
+    }
+
+    console.log('Counter selected:', data);
+    return data;
+  } catch(error) {
+    console.error("Error selecting counter:", error);
+    throw error;
+  }
+}
+
+
+const API = { getServices, addCustomerToQueue, getNextTicket, getCounters, selectCounter };
 export default API

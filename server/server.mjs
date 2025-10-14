@@ -1,10 +1,8 @@
 import express from 'express';
-import session from 'express-session';
 import http from 'http';
 import { Server } from 'socket.io'
 import cors from 'cors';
 import morgan from 'morgan';
-import passport from 'passport';
 
 import { Queues } from './models/models.mjs'
 import { InternalServerError } from './models/errors.mjs';
@@ -59,7 +57,7 @@ io.on('connection', socket => {
     console.log(`New user: ${socket.id}`);
 
     socket.on('disconnect', () => {
-        console.log(`Socket ${socket.id} has been disconnected. Removing it from queue!`);        
+        console.log(`Socket ${socket.id} has been disconnected. Removing it from queue!`);
         queues.removeTicket(socket.id);
     })
 })
@@ -78,15 +76,15 @@ app.post('/api/queues/:serviceID', (req, res) => {
     try {
         const serviceID = parseInt(req.params.serviceID);
         const customerID = req.body.customerID
-        
+
         const ticket = "Fake Ticket"; // Aurora, here you should implement the get ticket function
         queues.addTicket(serviceID,customerID, /*ticket.id*/1) // Aurora pass the ID of the newly created ticket here
-        
+
         return res.status(200).json({ "number": ticket});
     } catch (error) {
         return res.status(500).json(new InternalServerError())
     }
-    
+
 });
 
 //COUNTERS
@@ -99,12 +97,29 @@ app.get('/api/counters', async (req, res) => {
       res.status(500).json({error: 'Internal server error'});
   }
 })
-//API for selectNextCustomer 
+
+app.post('/api/counters/:id/select', async (req, res) => {
+    try {
+        const counterId = parseInt(req.params.id);
+        const {employeeId} = req.body;
+
+        if (!employeeId) {
+            return res.status(400).json({error: 'Employee ID is required'});
+        }
+
+        const result = await DAO.selectCounter(counterId, employeeId);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error selecting counter:', error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+})
+//API for selectNextCustomer
 app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
     try {
         const previousTicketId = parseInt(req.params.previousTicketId);
         const counterID = parseInt(req.params.counterID);
-        
+
         //close previous ticket served at the specific counter
         await DAO.closeTicket(previousTicketId);
 
@@ -114,8 +129,8 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
         //retrieve next ticket id
         const ticket = queues.getNextTicket(serviceIDs);// ticket is an obj {customerID, ticketID}
 
-      
-        //Aurora use here the get ticket method with the ticket.ticketID above to retrieve the info of the selected ticket. 
+
+        //Aurora use here the get ticket method with the ticket.ticketID above to retrieve the info of the selected ticket.
         //await DAO.getTicket(ticket.ticketID)  I think something like this!
         //You also have to set the counter in the db for the ticket
 
@@ -128,7 +143,7 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
           initialDate: new Date().toISOString(),
           finalDate: null
         }
-        
+
         return res.status(200).json(ticketInfo);
     } catch {
         res.status(200).json({

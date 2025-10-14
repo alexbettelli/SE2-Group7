@@ -4,6 +4,7 @@ import { Layout } from './components/Layout.jsx';
 import { HomePage } from './pages/Home.jsx';
 import { CustomerPage } from './pages/Customer.jsx';
 import { EmployeePage } from './pages/Employee.jsx';
+import { CounterDisplayPage } from './pages/CounterDisplay.jsx';
 import { PageNotFound } from './pages/NotFound.jsx';
 import API from "./API/API.mjs";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -38,6 +39,7 @@ function App() {
             />
             <Route path="customer" element={<CustomerPage services={services}/>} />
             <Route path="employee" element={<EmployeePage />} />
+            <Route path="counter-display" element={<CounterDisplayPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>
