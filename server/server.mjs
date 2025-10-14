@@ -3,13 +3,13 @@ import session from 'express-session';
 import http from 'http';
 import { Server } from 'socket.io'
 import cors from 'cors';
-import { getServices } from './dao/serviceDAO.mjs';
-import { InternalServerError } from './models/errors.mjs';
 import morgan from 'morgan';
 import passport from 'passport';
-import {
-    getAllCounters
-} from './dao.mjs';
+
+import { Queues } from './models/models.mjs'
+import { InternalServerError } from './models/errors.mjs';
+
+import DAO from './dao/DAO.mjs';
 
 
 const app = express();
@@ -31,6 +31,23 @@ const PORT = 3001;
 
 const server = http.createServer(app);
 
+//obj to manage queues
+const queues = new Queues();
+//Initialize queues forEach service available
+//TODO: retrive service based on real day by day assigment (based on date)
+async function inizializeQueues() {
+    const services = await DAO.getAllServices()
+    const serviceInfo = services.map(service => ({
+        serviceID: service.id,
+        avgServiceTime: service.average_time
+    }));
+    queues.inizializeQueues(serviceInfo);
+}
+inizializeQueues();
+//TODO: implement code to reset queues every morning!!
+
+
+//SOCKET
 // io is used to handle the WebSocket
 const io = new Server(server, {
     cors: {
@@ -38,53 +55,76 @@ const io = new Server(server, {
         methods: ['GET', 'POST']
     }
 });
-
 io.on('connection', socket => {
     console.log(`New user: ${socket.id}`);
 
     socket.on('disconnect', () => {
-        console.log(`Socket ${socket.id} has been disconnected. Removing it from queue!`);
-        queues.forEach((value, key) => {
-            queues.set(key, value.filter(user => user.socketID != socket.id));
-        });
-        console.log(queues);
+        console.log(`Socket ${socket.id} has been disconnected. Removing it from queue!`);        
+        queues.removeTicket(socket.id);
     })
 })
 
-const queues = new Map();
 
+//SERVICES
 app.get('/api/services', async (req, res) => {
     try{
-        const services = await getServices();
+        const services = await DAO.getAllServices();
         return res.status(200).json(services);
     }catch(err){
         return res.status(500).json(new InternalServerError())
     }
 });
-
 app.post('/api/queues/:serviceID', (req, res) => {
-    const serviceID = req.params.serviceID;
-    const customerID = req.body.customerID;
-    const ticket = "Fake Ticket"; // Aurora, here you should implement the get ticket function
-    if(customerID === undefined) return res.status(400).end();
-    if(!queues.has(serviceID)) queues.set(serviceID, [ {"socketID": customerID, "ticket": ticket} ]);
-    else queues.get(serviceID).push({"socketID": customerID, "ticket": ticket});
-    console.log(queues);
-    return res.status(200).json({ "number": ticket});
+    try {
+        const serviceID = parseInt(req.params.serviceID);
+        const customerID = req.body.customerID
+        
+        const ticket = "Fake Ticket"; // Aurora, here you should implement the get ticket function
+        queues.addTicket(serviceID,customerID, /*ticket.id*/1) // Aurora pass the ID of the newly created ticket here
+        
+        return res.status(200).json({ "number": ticket});
+    } catch (error) {
+        return res.status(500).json(new InternalServerError())
+    }
+    
 });
-
-
 
 //COUNTERS
 app.get('/api/counters', async (req, res) => {
   try {
-      const counters = await getAllCounters();
+      const counters = await DAO.getAllCounters();
       console.log(counters);
       res.json(counters);
   } catch {
       res.status(500).json({error: 'Internal server error'});
   }
 })
+//API for selectNextCustomer 
+app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
+    try {
+        const previousTicketId = parseInt(req.params.previousTicketId);
+        const counterID = parseInt(req.params.counterID);
+        
+        //close previous ticket served at the specific counter
+        await DAO.closeTicket(previousTicketId);
+
+        //retrieve all services assigned to the counter
+        const serviceIDs = await DAO.getServicesAssignedToCounter(counterID);
+
+        //retrieve next ticket id
+        const ticket = queues.getNextTicket(serviceIDs);// ticket is an obj {customerID, ticketID}
+        const ticketInfo = "Fake Ticket"
+        //Aurora use here the get ticket method with the ticket.ticketID above to retrieve the info of the selected ticket. 
+        //await DAO.getTicket(ticket.ticketID)  I think something like this!
+        //You also have to set the counter in the db for the ticket
+        
+        return res.status(200).json(ticket);
+    } catch {
+        res.status(500).json({error: 'Internal server error'});
+    }
+})
+
+
 
 server.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
