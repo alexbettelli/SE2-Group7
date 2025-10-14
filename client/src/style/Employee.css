@@ -1,11 +1,11 @@
-.services-list-container {
+.employee-container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-.services-list-title {
+.employee-title {
   text-align: center;
   font-size: 2rem;
   color: #1e40af;
@@ -13,20 +13,20 @@
   font-weight: bold;
 }
 
-.no-services {
+.no-counters {
   text-align: center;
   color: #64748b;
   font-size: 1.1rem;
   padding: 2rem;
 }
 
-.services-grid {
+.counters-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
-.service-card {
+.counter-card {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
@@ -37,23 +37,15 @@
   align-items: center;
   text-align: center;
   gap: 0.75rem;
-  cursor: pointer;
   border: 3px solid transparent;
 }
 
-.service-card:hover {
+.counter-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-.service-card.selected {
-  border: 3px solid #3b82f6;
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
-}
-
-.service-tag {
+.counter-number {
   display: inline-block;
   width: 48px;
   height: 48px;
@@ -63,18 +55,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
-.service-name {
+.counter-service {
   font-size: 1.25rem;
   color: #1e293b;
   margin: 0;
   font-weight: 600;
 }
 
-.service-time {
+.counter-status {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -82,17 +75,25 @@
   font-size: 1rem;
 }
 
-.service-time i {
+.counter-status.available {
+  color: #059669;
+}
+
+.counter-status.busy {
+  color: #dc2626;
+}
+
+.counter-status i {
   font-size: 1.1rem;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .services-grid {
+  .counters-grid {
     grid-template-columns: 1fr;
   }
   
-  .services-list-container {
+  .employee-container {
     padding: 1rem;
   }
 }

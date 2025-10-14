@@ -1,33 +1,58 @@
-import { 
-  Service 
+import dayjs from "dayjs";
+import { Service } from "../models.mjs"
+import { getURL } from "../utils/utils.mjs";
+import {
+  Counter
 } from "../models.mjs"
 
 const SERVER_URL = "http://localhost:3001";
 
+const getServices = async () => {
+    const response = await fetch(getURL('api/services'));
+    if(response.ok) return await response.json();
+    else throw await response.text()
+}
 
-//SERVICES
-export const getServices = async () => {
+const addCustomerToQueue = async (serviceID, customerID) => {
+    const response = await fetch(getURL(`api/queues/${serviceID}`), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ "customerID": customerID })
+    });
+    if(response.ok) return response.json();
+    else throw await response.text();
+}
+
+
+//COUNTERS
+export const getCounters = async () => {
   try {
-    const response = await fetch(`${SERVER_URL}/api/services`, {
+    const response = await fetch(`${SERVER_URL}/api/counters`, {
             method: 'GET',
         });
-        
+
         const data = await response.json();
 
         if (!response.ok) {
             throw new Error(data.error);
         }
-        const services = data.map(service => new Service(
-          service.id, 
-          service.name,
-          service.tag, 
-          service.average_time
+
+        console.log(data);
+        const counters = data.map(counter => new Counter(
+          counter.id,
+          counter.number,
+          counter.service_id,
+          counter.service_tag,
+          counter.service_name,
+          counter.is_busy
         ));
-        console.log(services);
-        return services;
-  } 
+        console.log(counters);
+        return counters;
+  }
   catch(error) {
-      console.error("Error in GET Services");
+      console.error("Error in GET Counters");
       return [];
   }
 }
+const API = { getServices, addCustomerToQueue }
+export default API

@@ -1,9 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import '../style/Home.css';
-import {
-    getServices
-} from "../API/API.mjs";
+import API from "../API/API.mjs";
 
 function HomePage (props) {
   const navigate = useNavigate();
@@ -12,7 +10,7 @@ function HomePage (props) {
 
   const handleCustomerPage = async () => {
     try {
-      const services = await getServices();
+      const services = await API.getServices();
       setServices(services);
       navigate('/customer');
     } catch (e) {
