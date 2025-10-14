@@ -74,16 +74,21 @@ app.get('/api/services', async (req, res) => {
         return res.status(500).json(new InternalServerError())
     }
 });
-app.post('/api/queues/:serviceID', (req, res) => {
+app.post('/api/queues/:serviceID', async (req, res) => {
     try {
         const serviceID = parseInt(req.params.serviceID);
         const customerID = req.body.customerID
         
-        const ticket = "Fake Ticket"; // Aurora, here you should implement the get ticket function
-        queues.addTicket(serviceID,customerID, /*ticket.id*/1) // Aurora pass the ID of the newly created ticket here
+        const ticket = await DAO.createTicket(serviceID); //ticket is an obj {number, id, service_id}
+        queues.addTicket(serviceID, customerID, ticket.id);
         
-        return res.status(200).json({ "number": ticket});
+        return res.status(200).json({ 
+            "number": ticket.number,
+            "id": ticket.id,
+            "service": ticket.service_id  
+        });
     } catch (error) {
+        console.error('Error creating ticket:', error);
         return res.status(500).json(new InternalServerError())
     }
     
@@ -105,22 +110,29 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
         const previousTicketId = parseInt(req.params.previousTicketId);
         const counterID = parseInt(req.params.counterID);
         
-        //close previous ticket served at the specific counter
-        await DAO.closeTicket(previousTicketId);
+        //close previous ticket if any
+        if (previousTicketId && previousTicketId > 0) {
+            await DAO.closeTicket(previousTicketId);
+        }
 
-        //retrieve all services assigned to the counter
+        //retrive services assigned to the counter
         const serviceIDs = await DAO.getServicesAssignedToCounter(counterID);
-
-        //retrieve next ticket id
-        const ticket = queues.getNextTicket(serviceIDs);// ticket is an obj {customerID, ticketID}
-        const ticketInfo = "Fake Ticket"
-        //Aurora use here the get ticket method with the ticket.ticketID above to retrieve the info of the selected ticket. 
-        //await DAO.getTicket(ticket.ticketID)  I think something like this!
-        //You also have to set the counter in the db for the ticket
+        const ticket = queues.getNextTicket(serviceIDs); // ticket is an obj {customerID, ticketID}
         
-        return res.status(200).json(ticket);
-    } catch {
-        res.status(500).json({error: 'Internal server error'});
+        if (!ticket) {
+            return res.status(200).json({ message: 'No tickets in queue' });
+        }
+        //retrive ticket info from db
+        const ticketInfo = await DAO.getTicket(ticket.ticketID);
+        await DAO.assignTicketToCounter(ticket.ticketID, counterID);
+        
+        return res.status(200).json({
+            ...ticketInfo,
+            customerID: ticket.customerID
+        });
+    } catch (error) {
+        console.error('Error in selectNextCustomer:', error);
+        return res.status(500).json(new InternalServerError());
     }
 })
 

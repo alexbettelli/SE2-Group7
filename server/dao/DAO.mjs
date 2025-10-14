@@ -7,12 +7,49 @@ const db = new sqlite.Database('./database.db', (err) => {
 })
 
 //TICKET
+const createTicket = (serviceID) => {
+    return new Promise((resolve, reject) => {
+        const today = dayjs().format('YYYY-MM-DD');
+        
+        const getNextNumberQuery = `
+            SELECT COALESCE(MAX(number), 0) + 1 as nextNumber
+            FROM Ticket 
+            WHERE SUBSTR(initialDate, 1, 10) = ? 
+        `;
+        
+        db.get(getNextNumberQuery, [today], (err, row) => {
+            if (err) return reject(err);
+            
+            const ticketNumber = row.nextNumber;
+            const now = dayjs().format('YYYY-MM-DD HH:mm:ss');
+            
+            const insertQuery = `
+                INSERT INTO Ticket (number, service_id, initialDate, status, counter_id)
+                VALUES (?, ?, ?, 0, 0)
+            `;
+            //assign counter_id = 0 (not assigned yet)
+            
+            db.run(insertQuery, [ticketNumber, serviceID, now], function(err) {
+                if (err) return reject(err);
+                
+                resolve({
+                    id: this.lastID,
+                    number: ticketNumber,
+                    service_id: serviceID,
+                    initialDate: now,
+                    status: 0
+                });
+            });
+        });
+    });
+};
+
 const closeTicket = (ticket_Id) => {
   return new Promise((resolve, reject) => {
     const now = dayjs().format('YYYY-MM-DD HH:mm:ss');
     const query = `
         UPDATE Ticket
-        SET finalDate = ?
+        SET finalDate = ?, status = 1
         WHERE id = ?;
     `;
     db.run(query, [now, ticket_Id], function(err) {
@@ -78,5 +115,38 @@ const getAllCounters = () => {
   });
 }
 
-const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket}
+const getTicket = (ticketID) => {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT t.*, s.name as service_name, s.tag as service_tag
+            FROM Ticket t
+            JOIN Service s ON t.service_id = s.id
+            WHERE t.id = ?
+        `;
+        
+        db.get(query, [ticketID], (err, row) => {
+            if (err) return reject(err);
+            if (!row) return reject(new Error('Ticket not found'));
+            resolve(row);
+        });
+    });
+};
+
+const assignTicketToCounter = (ticketID, counterID) => {
+    return new Promise((resolve, reject) => {
+        const query = `
+            UPDATE Ticket 
+            SET counter_id = ? 
+            WHERE id = ?
+        `;
+        
+        db.run(query, [counterID, ticketID], function(err) {
+            if (err) return reject(err);
+            if (this.changes === 0) return reject(new Error('Ticket not found'));
+            resolve(`Ticket ${ticketID} assigned to counter ${counterID}`);
+        });
+    });
+};
+
+const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket, createTicket, getTicket, assignTicketToCounter}
 export default DAO;
