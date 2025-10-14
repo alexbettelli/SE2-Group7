@@ -55,14 +55,15 @@ const getServicesAssignedToCounter = (counter_id) => {
     })
 }
 // COUNTERS
-// TODO implement busy status based on current tickets
 const getAllCounters = () => {
   return new Promise((resolve, reject) => {
     db.all(`
-      SELECT c.id, c.number, s.id as service_id, s.tag as service_tag, s.name as service_name
+      SELECT c.id, c.number, s.id as service_id, s.tag as service_tag, s.name as service_name,
+             CASE WHEN ea.counter_id IS NOT NULL THEN 1 ELSE 0 END as is_busy
       FROM Counter c 
       JOIN ServiceAssignment sa ON c.id = sa.counter_id 
       JOIN Service s ON sa.service_id = s.id
+      LEFT JOIN EmployeeAssignment ea ON c.id = ea.counter_id
       ORDER BY c.number
     `, (err, rows) => {
       if(err) return reject(err);
@@ -72,7 +73,7 @@ const getAllCounters = () => {
         row.service_id,
         row.service_tag,
         row.service_name,
-        false
+        !!row.is_busy
       )));
     })
   });
