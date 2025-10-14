@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 function Service(id, name, tag, average_time) {
   this.id = id;
   this.name = name;
@@ -14,4 +16,13 @@ function Counter(id, number, service_id, service_tag, service_name, is_busy) {
   this.is_busy = is_busy || false;
 }
 
-export { Service, Counter }
+function Ticket(id, number, serviceTag, counterNumber, initialDate, finalDate) {
+  this.id = id;
+  this.number = number;
+  this.serviceTag = serviceTag;
+  this.counterNumber = counterNumber;
+  this.initialDate = initialDate ? dayjs(initialDate).format('YYYY-MM-DD HH:mm:ss') : null;
+  this.finalDate = finalDate ? dayjs(finalDate).format('YYYY-MM-DD HH:mm:ss') : null;
+}
+  
+export { Service, Counter, Ticket };

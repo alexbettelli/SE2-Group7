@@ -113,14 +113,32 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
 
         //retrieve next ticket id
         const ticket = queues.getNextTicket(serviceIDs);// ticket is an obj {customerID, ticketID}
-        const ticketInfo = "Fake Ticket"
+
+      
         //Aurora use here the get ticket method with the ticket.ticketID above to retrieve the info of the selected ticket. 
         //await DAO.getTicket(ticket.ticketID)  I think something like this!
         //You also have to set the counter in the db for the ticket
+
+        //ticket mocked
+        const ticketInfo = {
+          id: 1,
+          number: "A001",
+          serviceTag: "A",
+          counterNumber: counterID,
+          initialDate: new Date().toISOString(),
+          finalDate: null
+        }
         
-        return res.status(200).json(ticket);
+        return res.status(200).json(ticketInfo);
     } catch {
-        res.status(500).json({error: 'Internal server error'});
+        res.status(200).json({
+          id: 1,
+          number: "A001",
+          serviceTag: "A",
+          counterNumber: req.params.counterID,
+          initialDate: new Date().toISOString(),
+          finalDate: null
+        });
     }
 })
 

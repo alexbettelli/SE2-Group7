@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { getCounters } from '../API/API.mjs';
+import { CounterList } from '../components/CounterList';
+import { Counter } from '../components/Counter';
 import '../style/Employee.css';
+
+
 
 function EmployeePage() {
   const [counters, setCounters] = useState([]);
+  const [selectedCounter, setSelectedCounter] = useState(null);
+
+  const handleCounterSelect = (counter) => {
+    setSelectedCounter(counter);
+  }
 
   useEffect(() => {
     console.log('Fetching counters');
@@ -16,26 +26,11 @@ function EmployeePage() {
   }, []);
 
   return (
-    <div className="employee-container">
-      <h2 className="employee-title">Counters</h2>
-      
-      {!counters || counters.length === 0 ? (
-        <p className="no-counters">No counters available.</p>
-      ) : (
-        <div className="counters-grid">
-          {counters.map(counter => (
-            <div key={counter.id} className="counter-card">
-              <div className="counter-number">{counter.number}</div>
-              <h3 className="counter-service">{counter.service_name} ({counter.service_tag})</h3>
-              <div className={`counter-status ${counter.is_busy ? 'busy' : 'available'}`}>
-                <i className="bi bi-circle-fill"></i>
-                <span>{counter.is_busy ? "Busy" : "Available"}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+    <div>
+      <CounterList counters={counters} setSelectedCounter={handleCounterSelect} />
+      <Counter counter={selectedCounter} />
     </div>
+  
   );
 }
 
