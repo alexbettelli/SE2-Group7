@@ -26,7 +26,7 @@ function EmployeePage() {
   }, []);
 
   return (
-    <div>
+    <div className='employee-container'>
       <CounterList counters={counters} setSelectedCounter={handleCounterSelect} />
       <Counter counter={selectedCounter} />
     </div>
