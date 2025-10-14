@@ -30,16 +30,20 @@ function Counter({ counter }) {
     }
   };
 
+  return (
+    <>
+      { 
+        //counter ? 
+          <Display counter={counter} ticket={ticket} handleNextTicket={handleNextTicket}/>
+         /*: (<div className="counter-details">
+            <h2 className="counter-details-title">Select a Counter</h2>
+            <p className="no-counter-selected">No counter selected. Please select a counter to view details.</p>
+          </div>)*/
+      }
+    </>
+  )
 
-
-  if (!counter) {
-    return (
-      <div className="counter-details">
-        <h2 className="counter-details-title">Select a Counter</h2>
-        <p className="no-counter-selected">No counter selected. Please select a counter to view details.</p>
-      </div>
-    );
-  }
+  /*
   return (
     <div className="counter-details">
       <h2 className="counter-details-title">Counter Details</h2>
@@ -66,6 +70,25 @@ function Counter({ counter }) {
         Next Ticket
       </button>
     </div>
-  );
+  );*/
 }
+
+function Display(props){
+  const { counter, ticket, handleNextTicket } = props;
+  return (
+    <div className="display-container">
+      <div className='display'>
+        <div className="display-header">
+          <p>{counter ? `Counter ${counter.number}` : "Select a counter"}</p>
+        </div>
+        {counter && <div className="display-body">
+          <h2>{ ticket ? `${ticket.number}` : "AVAILABLE" }</h2>
+        </div>}
+      </div>
+      { counter && <button onClick={handleNextTicket}>Call next</button> }
+    </div>
+  )
+}
+
+
 export { Counter };
