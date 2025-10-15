@@ -9,9 +9,9 @@ import '../style/Board.css';
 function Counter(props) {
   const [ticket, setTicket] = useState(null);
   const boardMock = {
-    "service 1": "5",
-    "service 2": "2",
-    "service 3": "0"
+    "Service 1": "5",
+    "Service 2": "2",
+    "Service 3": "0"
   }
   const employeeId = 1; // FIXME hardcoded employee id
 

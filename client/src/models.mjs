@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-function Service(id, name, tag, average_time) {
+function Service(id, tag, name, average_time) {
   this.id = id;
   this.name = name;
   this.tag = tag;

@@ -20,7 +20,7 @@ function CounterList({ counters, setSelectedCounter, refreshCounters }) {
   };
 
   return (
-    <div className="employee-container">
+    <div className="counter-list-wrapper">
       <h2 className="employee-title">Select Counter</h2>
 
       {!counters || counters.length === 0 ? (

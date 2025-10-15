@@ -76,14 +76,14 @@ app.post('/api/queues/:serviceID', async (req, res) => {
     try {
         const serviceID = parseInt(req.params.serviceID);
         const customerID = req.body.customerID
-        
+
         const ticket = await DAO.createTicket(serviceID); //ticket is an obj {number, id, service_id}
         queues.addTicket(serviceID, customerID, ticket.id);
-        
-        return res.status(200).json({ 
+
+        return res.status(200).json({
             "number": ticket.number,
             "id": ticket.id,
-            "service": ticket.service_id  
+            "service": ticket.service_id
         });
     } catch (error) {
         console.error('Error creating ticket:', error);
@@ -144,7 +144,7 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
     try {
         const previousTicketId = parseInt(req.params.previousTicketId);
         const counterID = parseInt(req.params.counterID);
-        
+
         //close previous ticket if any
         if (previousTicketId && previousTicketId > 0) {
             await DAO.closeTicket(previousTicketId);
@@ -173,6 +173,10 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
 
 
 
-server.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(PORT, () => {
+    console.log(`Server listening at http://localhost:${PORT}`);
+  });
+}
+
+export { app };
