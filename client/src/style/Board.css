@@ -1,10 +1,39 @@
-.board{
-  background-color: #fff;
-  border: 1px solid #ccc;
+.board-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  width: 100%;
 }
 
-table, tr td, tr, th{
-  border-bottom: 1px solid #ccc;
-  padding: 10px 20px;
-  border-collapse: collapse;
+.board {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  border: 1px solid #e0e0e0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  min-width: 260px;
+  max-width: 350px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.board th, .board td {
+  padding: 12px 18px;
+  text-align: left;
+}
+
+.board thead {
+  background: #1976d2;
+  color: #fff;
+  font-size: 1.1em;
+}
+
+.board tbody tr:nth-child(even) {
+  background: #f5f5f5;
+}
+
+.board tbody tr:hover {
+  background: #e3f2fd;
+  transition: background 0.2s;
 }
