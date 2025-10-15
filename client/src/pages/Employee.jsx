@@ -1,32 +1,45 @@
 import React, {useEffect, useState} from 'react';
 import {getCounters} from '../API/API.mjs';
 import {CounterList} from '../components/CounterList';
+import {Counter} from '../components/Counter';
 import '../style/Employee.css';
 
 
 function EmployeePage() {
   const [counters, setCounters] = useState([]);
   const [selectedCounter, setSelectedCounter] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleCounterSelect = (counter) => {
     setSelectedCounter(counter);
   }
 
-  useEffect(() => {
-    console.log('Fetching counters');
-    getCounters().then(data => {
-      console.log('Counters:', data);
+  const refreshCounters = async () => {
+    if (refreshing) return;
+    setRefreshing(true);
+    try {
+      const data = await getCounters();
       setCounters(data);
-    }).catch(error => {
+    } catch (error) {
       console.error('Error fetching counters:', error);
-    });
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    refreshCounters();
   }, []);
 
   return (
     <div className='employee-container'>
-      <CounterList counters={counters} setSelectedCounter={handleCounterSelect} />
+      <div className='employee-controls'/>
+      {
+        selectedCounter === null 
+        ? <CounterList counters={counters} setSelectedCounter={handleCounterSelect} refreshCounters={refreshCounters}/>
+        : <Counter counter={selectedCounter} setSelectedCounter={setSelectedCounter}/>
+      }
     </div>
-
   );
 }
 
