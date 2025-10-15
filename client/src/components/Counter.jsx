@@ -13,24 +13,20 @@ function Counter(props) {
     "Service 2": "2",
     "Service 3": "0"
   }
+  const employeeId = 1; // FIXME hardcoded employee id
 
   const handleNextTicket = async () => {
     try {
       const nextTicket = await getNextTicket(props.counter.id, ticket ? ticket.id : 0);
-      console.log(nextTicket);
-      if (nextTicket) {
-        setTicket({
+      setTicket({
           id: nextTicket.id,
           number: nextTicket.number,
           serviceTag: nextTicket.serviceTag,
           counterNumber: nextTicket.counterNumber,
           initialDate: nextTicket.initialDate,
           finalDate: nextTicket.finalDate,
-        });
-      }
-      else {
-        alert("No more tickets in the queue for this counter.");
-      }
+      });
+    
     } catch (error) {
       console.error("Error fetching next ticket:", error);
     }
@@ -69,7 +65,7 @@ function Counter(props) {
         </Col>
       </Row>
       <Row className="back-button-row">
-        <Button className="back-button" onClick={() => {props.setSelectedCounter(null)}}>Back to counters</Button>
+        <Button className="back-button" onClick={() => {props.handleReleaseCounter(props.counter.id, employeeId);}}>Back to counters</Button>
       </Row>
            
     </Container> 
@@ -83,10 +79,12 @@ function Display(props){
     <div className="display-container">
       <div className='display'>
         <div className="display-header">
-          <p>{counter ? `Counter ${counter.number}` : "Select a counter"}</p>
+          <p>{ticket ? `Current ticket:` : "Call the first ticket"}</p>
         </div>
         {counter && <div className="display-body">
-          <h2>{ ticket ? `${ticket.number}` : "AVAILABLE" }</h2>
+          <h2>{ticket === null ? "AVAILABLE"
+            : ticket.id === undefined ? "NO TICKETS IN QUEUE" : ticket.number}
+            </h2>
         </div>}
       </div>
       { counter && <button onClick={handleNextTicket}>Call next</button> }
