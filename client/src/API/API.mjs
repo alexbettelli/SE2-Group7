@@ -7,9 +7,27 @@ import {
 const SERVER_URL = "http://localhost:3001";
 
 const getServices = async () => {
-    const response = await fetch(getURL('api/services'));
-    if(response.ok) return await response.json();
-    else throw await response.text()
+    try {
+        const response = await fetch(getURL('api/services'));
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch services');
+        }
+        
+        const data = await response.json();
+        
+        const services = data.map(service => new Service(
+            service.id,
+            service.tag,
+            service.name,
+            service.average_time
+        ));
+        
+        return services;
+    } catch (error) {
+        console.error("Error in GET Services:", error);
+        throw error;
+    }
 }
 
 const addCustomerToQueue = async (serviceID, customerID) => {

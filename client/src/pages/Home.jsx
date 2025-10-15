@@ -12,6 +12,7 @@ function HomePage (props) {
     try {
       const services = await API.getServices();
       setServices(services);
+      console.log("Servizi: ", services);
       navigate('/customer');
     } catch (e) {
       console.error(e);

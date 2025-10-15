@@ -63,13 +63,13 @@ const closeTicket = (ticket_Id) => {
 //SERVICES
 const getAllServices = () => {
   return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM Service;'
+    const query = 'SELECT id, name, tag, average_time FROM Service;'
     db.all(query, (err, rows) => {
       if(err) return reject(err);
       const services = rows.map(row => new Service(
         row.id,
-        row.name,
-        row.tag,
+        row.tag,           
+        row.name,          
         row.average_time
       ))
       resolve(services);
