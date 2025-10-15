@@ -8,32 +8,59 @@
 
 .board {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   font-family: 'Segoe UI', Arial, sans-serif;
-  min-width: 260px;
-  max-width: 350px;
+  min-width: 320px;
+  max-width: 420px;
   margin: 0 auto;
   overflow: hidden;
+  border-collapse: collapse;
 }
 
 .board th, .board td {
-  padding: 12px 18px;
-  text-align: left;
+  padding: 1rem 1.5rem;
+  text-align: center;
 }
 
 .board thead {
-  background: #1976d2;
+  background: linear-gradient(135deg, #1e40af, #1e3a8a);
   color: #fff;
-  font-size: 1.1em;
+}
+
+.board thead th {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 1.25rem 1.5rem;
+}
+
+.board tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background 0.2s ease;
+}
+
+.board tbody tr:last-child {
+  border-bottom: none;
 }
 
 .board tbody tr:nth-child(even) {
-  background: #f5f5f5;
+  background: #f8fafc;
 }
 
 .board tbody tr:hover {
-  background: #e3f2fd;
-  transition: background 0.2s;
+  background: #e0f2fe;
+}
+
+.board tbody td {
+  color: #334155;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.board tbody td:first-child {
+  color: #1e40af;
+  font-weight: 700;
+  font-size: 1.1rem;
 }

@@ -9,9 +9,9 @@ import '../style/Board.css';
 function Counter(props) {
   const [ticket, setTicket] = useState(null);
   const boardMock = {
-    "service A": "5",
-    "service B": "2",
-    "service C": "0"
+    "Service 1": "5",
+    "Service 2": "2",
+    "Service 3": "0"
   }
 
   const handleNextTicket = async () => {

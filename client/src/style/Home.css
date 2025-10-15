@@ -16,20 +16,19 @@ body {
 }
 
 .home-container {
-  /* Avoid forcing full viewport height to remove extra space before footer */
-  min-height: auto;
   background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
   display: flex;
   flex-direction: column;
   width: 100%;
   margin: 0;
+  flex: 1;
 }
 
 .main-content {
   flex: 1;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem 2rem;
   width: 100%;
 }
 
@@ -38,8 +37,7 @@ body {
   /* Reduce bottom spacing under title */
   margin-bottom: 1.5rem;
   /* Push the title further down */
-  margin-top: 2rem;
-  margin-bottom: 3rem;
+  margin-top: 1.5rem;
   color: #1e40af;
 }
 
@@ -111,10 +109,5 @@ body {
   .home-role-buttons {
     grid-template-columns: 1fr;
   }
-}
-
-.home-container .main-content {
-  flex: 0 0 auto;
-  padding-bottom: 20rem;
 }
 
