@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
-import { app } from '../server.mjs';
+import { app } from '../../server.mjs';
 
 describe('POST /api/counters/:id/select', () => {
   beforeEach(() => {

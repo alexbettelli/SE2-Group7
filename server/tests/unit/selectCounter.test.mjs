@@ -45,7 +45,7 @@ let DAO;
 beforeEach(async () => {
   deleteCalls = [];
   insertCalls = [];
-  ({ default: DAO } = await import('../dao/DAO.mjs'));
+  ({ default: DAO } = await import('../../dao/DAO.mjs'));
 });
 
 describe('DAO.selectCounter', () => {
