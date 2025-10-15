@@ -1,10 +1,8 @@
 import express from 'express';
-import session from 'express-session';
 import http from 'http';
 import { Server } from 'socket.io'
 import cors from 'cors';
 import morgan from 'morgan';
-import passport from 'passport';
 
 import { Queues } from './models/models.mjs'
 import { InternalServerError } from './models/errors.mjs';
@@ -59,7 +57,7 @@ io.on('connection', socket => {
     console.log(`New user: ${socket.id}`);
 
     socket.on('disconnect', () => {
-        console.log(`Socket ${socket.id} has been disconnected. Removing it from queue!`);        
+        console.log(`Socket ${socket.id} has been disconnected. Removing it from queue!`);
         queues.removeTicket(socket.id);
     })
 })
@@ -91,7 +89,7 @@ app.post('/api/queues/:serviceID', async (req, res) => {
         console.error('Error creating ticket:', error);
         return res.status(500).json(new InternalServerError())
     }
-    
+
 });
 
 //COUNTERS
@@ -104,7 +102,24 @@ app.get('/api/counters', async (req, res) => {
       res.status(500).json({error: 'Internal server error'});
   }
 })
-//API for selectNextCustomer 
+
+app.post('/api/counters/:id/select', async (req, res) => {
+    try {
+        const counterId = parseInt(req.params.id);
+        const {employeeId} = req.body;
+
+        if (!employeeId) {
+            return res.status(400).json({error: 'Employee ID is required'});
+        }
+
+        const result = await DAO.selectCounter(counterId, employeeId);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error selecting counter:', error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+})
+//API for selectNextCustomer
 app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
     try {
         const previousTicketId = parseInt(req.params.previousTicketId);
