@@ -132,7 +132,7 @@ const getTicket = (ticketID) => {
     });
 };
 
-const assignTicketToCounter = (ticketID, counterID) => {
+/*const assignTicketToCounter = (ticketID, counterID) => {
     return new Promise((resolve, reject) => {
         const query = `
             UPDATE Ticket 
@@ -146,7 +146,7 @@ const assignTicketToCounter = (ticketID, counterID) => {
             resolve(`Ticket ${ticketID} assigned to counter ${counterID}`);
         });
     });
-};
+};*/
 
-const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket, createTicket, getTicket, assignTicketToCounter}
+const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket, createTicket, getTicket}
 export default DAO;

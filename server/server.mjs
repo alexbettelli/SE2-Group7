@@ -124,7 +124,7 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
         }
         //retrive ticket info from db
         const ticketInfo = await DAO.getTicket(ticket.ticketID);
-        await DAO.assignTicketToCounter(ticket.ticketID, counterID);
+        //await DAO.assignTicketToCounter(ticket.ticketID, counterID);
         
         return res.status(200).json({
             ...ticketInfo,
