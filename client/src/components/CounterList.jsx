@@ -1,8 +1,8 @@
 import { selectCounter } from '../API/API.mjs';
 import { useState } from 'react';
-
 function CounterList({ counters, setSelectedCounter, refreshCounters }) {
   const [selectedCounter, setSelectedCounterState] = useState(null);
+
 
   const handleCounterSelect = async (counter) => {
     try {
@@ -28,23 +28,28 @@ function CounterList({ counters, setSelectedCounter, refreshCounters }) {
       ) : (
         <div className="counters-grid">
           {counters.map(counter => (
-            <div
-              key={counter.id}
-              className={`counter-card ${selectedCounter?.id === counter.id ? 'selected' : ''} ${counter.is_busy ? 'busy' : ''}`}
-              onClick={counter.is_busy ? undefined : () => handleCounterSelect(counter)}
-            >
-              <div className="counter-number">{counter.number}</div>
-              <h3 className="counter-service">{counter.service_name} ({counter.service_tag})</h3>
-              <div className={`counter-status ${counter.is_busy ? 'busy' : 'available'}`}>
-                <i className="bi bi-circle-fill"></i>
-                <span>{counter.is_busy ? "Busy" : "Available"}</span>
-              </div>
-            </div>
+            <CounterChoice key={counter.id} counter={counter} selectedCounter={selectedCounter} handleCounterSelect={handleCounterSelect}/>            
           ))}
         </div>
       )}
     </div>
   );
+}
+
+function CounterChoice(props){
+  return(
+    <div key={props.counter.id} 
+         className={`counter-card ${props.selectedCounter?.id === props.counter.id ? 'selected' : ''} ${props.counter.is_busy ? 'busy' : ''}`}
+         onClick={props.counter.is_busy ? undefined : () => props.handleCounterSelect(props.counter)}
+    >    
+      <div className="counter-number">{props.counter.number}</div>
+      <h3 className="counter-service">{props.counter.service_name} ({props.counter.service_tag})</h3>
+      <div className={`counter-status ${props.counter.is_busy ? 'busy' : 'available'}`}>
+        <i className="bi bi-circle-fill"></i>
+        <span>{props.counter.is_busy ? "Busy" : "Available"}</span>
+      </div>
+    </div>
+  )
 }
 
 export { CounterList };
