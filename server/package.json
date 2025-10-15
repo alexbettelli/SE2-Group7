@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.mjs",
     "dev": "nodemon server.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest --run"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +23,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "vitest": "^3.2.4"
   }
 }
