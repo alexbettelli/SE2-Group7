@@ -25,9 +25,8 @@ const createTicket = (serviceID) => {
             
             const insertQuery = `
                 INSERT INTO Ticket (number, service_id, initialDate, status, counter_id)
-                VALUES (?, ?, ?, 0, 0)
+                VALUES (?, ?, ?, 0, NULL)
             `;
-            //assign counter_id = 0 (not assigned yet)
             
             db.run(insertQuery, [ticketNumber, serviceID, now], function(err) {
                 if (err) return reject(err);
