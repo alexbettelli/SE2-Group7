@@ -1,5 +1,4 @@
-import dayjs from "dayjs";
-import { Service } from "../models.mjs"
+import { Service, Ticket } from "../models.mjs"
 import { getURL } from "../utils/utils.mjs";
 import {
   Counter
@@ -24,7 +23,6 @@ const addCustomerToQueue = async (serviceID, customerID) => {
 }
 
 
-//COUNTERS
 export const getCounters = async () => {
   try {
     const response = await fetch(`${SERVER_URL}/api/counters`, {
@@ -54,5 +52,57 @@ export const getCounters = async () => {
       return [];
   }
 }
-const API = { getServices, addCustomerToQueue }
+
+export const getNextTicket = async (counterId, previousTicketId) => {
+  try {
+    const response = await fetch(`${SERVER_URL}/api/counter/${counterId}/next/${previousTicketId}`, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data?.error || 'Server error');
+
+
+    const ticket = new Ticket(
+      data.id, data.number, data.serviceTag, data.counterNumber, data.initialDate, data.finalDate
+    );
+
+    console.log("Fetched Ticket:", ticket);
+    if (!data) return null;
+
+    return ticket;
+
+  } catch (error) {
+    console.error("Error in POST Next Ticket", error);
+    return null;
+  }
+}
+
+export const selectCounter = async (counterId, employeeId) => {
+  try {
+    const response = await fetch(`${SERVER_URL}/api/counters/${counterId}/select`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ employeeId })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error);
+    }
+
+    console.log('Counter selected:', data);
+    return data;
+  } catch(error) {
+    console.error("Error selecting counter:", error);
+    throw error;
+  }
+}
+
+
+const API = { getServices, addCustomerToQueue, getNextTicket, getCounters, selectCounter };
 export default API
