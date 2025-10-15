@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {getCounters} from '../API/API.mjs';
+import {getCounters, releaseCounter} from '../API/API.mjs';
 import {CounterList} from '../components/CounterList';
 import {Counter} from '../components/Counter';
 import '../style/Employee.css';
@@ -13,6 +13,17 @@ function EmployeePage() {
   const handleCounterSelect = (counter) => {
     setSelectedCounter(counter);
   }
+
+  const handleReleaseCounter = async (counterId, employeeId) => {
+    try {
+      console.log("Releasing counter:", counterId, employeeId);
+      setSelectedCounter(null);
+      counters.find(c => c.id === counterId).is_busy = false; 
+      await releaseCounter(counterId, employeeId);
+    } catch (error) {
+      console.error("Error releasing counter:", error);
+    }
+  };
 
   const refreshCounters = async () => {
     if (refreshing) return;
@@ -37,7 +48,7 @@ function EmployeePage() {
       {
         selectedCounter === null 
         ? <CounterList counters={counters} setSelectedCounter={handleCounterSelect} refreshCounters={refreshCounters}/>
-        : <Counter counter={selectedCounter} setSelectedCounter={setSelectedCounter}/>
+        : <Counter counter={selectedCounter} handleReleaseCounter={handleReleaseCounter}/>
       }
     </div>
   );

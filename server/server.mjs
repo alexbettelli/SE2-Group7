@@ -76,14 +76,14 @@ app.post('/api/queues/:serviceID', async (req, res) => {
     try {
         const serviceID = parseInt(req.params.serviceID);
         const customerID = req.body.customerID
-        
+
         const ticket = await DAO.createTicket(serviceID); //ticket is an obj {number, id, service_id}
         queues.addTicket(serviceID, customerID, ticket.id);
-        
-        return res.status(200).json({ 
+
+        return res.status(200).json({
             "number": ticket.number,
             "id": ticket.id,
-            "service": ticket.service_id  
+            "service": ticket.service_id
         });
     } catch (error) {
         console.error('Error creating ticket:', error);
@@ -119,12 +119,32 @@ app.post('/api/counters/:id/select', async (req, res) => {
         res.status(500).json({error: 'Internal server error'});
     }
 })
+
+app.post('/api/counters/:id/release', async (req, res) => {
+    try {
+        const counterId = parseInt(req.params.id);
+        const { employeeId } = req.body;
+
+        if (!employeeId) {
+            return res.status(400).json({error: 'Employee ID is required'});
+        }
+
+        const result = await DAO.releaseCounter(counterId, employeeId);
+        console.log("releasing counter:", counterId, employeeId);
+
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error releasing counter:', error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+})
+
 //API for selectNextCustomer
 app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
     try {
         const previousTicketId = parseInt(req.params.previousTicketId);
         const counterID = parseInt(req.params.counterID);
-        
+
         //close previous ticket if any
         if (previousTicketId && previousTicketId > 0) {
             await DAO.closeTicket(previousTicketId);
@@ -133,14 +153,14 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
         //retrive services assigned to the counter
         const serviceIDs = await DAO.getServicesAssignedToCounter(counterID);
         const ticket = queues.getNextTicket(serviceIDs); // ticket is an obj {customerID, ticketID}
-        
+
+             
         if (!ticket) {
             return res.status(200).json({ message: 'No tickets in queue' });
         }
         //retrive ticket info from db
         const ticketInfo = await DAO.getTicket(ticket.ticketID);
         //await DAO.assignTicketToCounter(ticket.ticketID, counterID);
-        
         return res.status(200).json({
             ...ticketInfo,
             customerID: ticket.customerID
@@ -153,6 +173,10 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
 
 
 
-server.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(PORT, () => {
+    console.log(`Server listening at http://localhost:${PORT}`);
+  });
+}
+
+export { app };

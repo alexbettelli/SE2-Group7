@@ -1,4 +1,3 @@
-/* Global reset for full width */
 * {
   box-sizing: border-box;
 }
@@ -16,30 +15,26 @@ body {
 }
 
 .home-container {
-  /* Avoid forcing full viewport height to remove extra space before footer */
-  min-height: auto;
   background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
   display: flex;
   flex-direction: column;
   width: 100%;
   margin: 0;
+  flex: 1;
 }
 
 .main-content {
   flex: 1;
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: 3rem auto 0 auto;
+  padding: 1.5rem 2rem;
   width: 100%;
 }
 
 .page-title {
   text-align: center;
-  /* Reduce bottom spacing under title */
   margin-bottom: 1.5rem;
-  /* Push the title further down */
-  margin-top: 2rem;
-  margin-bottom: 3rem;
+  margin-top: 1.5rem;
   color: #1e40af;
 }
 
@@ -66,17 +61,14 @@ body {
   cursor: pointer;
 }
 
-/* Role selection buttons container */
 .home-role-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   max-width: 600px;
-  /* Reduce top margin above the buttons */
   margin: 1rem auto 0 auto;
 }
 
-/* Role buttons */
 .role-btn {
   padding: 1.25rem 1.5rem;
   border-radius: 12px;
@@ -111,10 +103,5 @@ body {
   .home-role-buttons {
     grid-template-columns: 1fr;
   }
-}
-
-.home-container .main-content {
-  flex: 0 0 auto;
-  padding-bottom: 20rem;
 }
 

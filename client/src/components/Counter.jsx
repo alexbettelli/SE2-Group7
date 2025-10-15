@@ -4,75 +4,74 @@ import {useState} from 'react';
 import { getNextTicket } from '../API/API.mjs';
 import '../style/Employee.css';
 import '../style/Board.css';
+import '../style/Counter.css';
 
 
 function Counter(props) {
   const [ticket, setTicket] = useState(null);
   const boardMock = {
-    "service 1": "5",
-    "service 2": "2",
-    "service 3": "0"
+    "Service 1": "5",
+    "Service 2": "2",
+    "Service 3": "0"
   }
+  const employeeId = 1; // FIXME hardcoded employee id
 
   const handleNextTicket = async () => {
     try {
       const nextTicket = await getNextTicket(props.counter.id, ticket ? ticket.id : 0);
-      console.log(nextTicket);
-      if (nextTicket) {
-        setTicket({
+      setTicket({
           id: nextTicket.id,
           number: nextTicket.number,
           serviceTag: nextTicket.serviceTag,
           counterNumber: nextTicket.counterNumber,
           initialDate: nextTicket.initialDate,
           finalDate: nextTicket.finalDate,
-        });
-      }
-      else {
-        alert("No more tickets in the queue for this counter.");
-      }
+      });
+    
     } catch (error) {
       console.error("Error fetching next ticket:", error);
     }
   };
  
-
   return (
+    
     <Container fluid>
       
-      <Row className="justify-content-center"> <p>COUNTER {props.counter.id} </p> </Row>      
+      <Row className="counter-name"> <p>COUNTER {props.counter.id} </p> </Row>      
       <Row>
-        <Col> 
-          <table className='board'>
+        <Col>
+          <div className="board-wrapper">
+            <table className='board'>
               <thead>
                 <tr>
-                    <th>Service</th>
-                    <th>Queue</th>
+                  <th>Service</th>
+                  <th>Queue</th>
                 </tr>
               </thead>
               <tbody>
                 {
-                  Object.entries(boardMock).map(([key, value], index) => {
-                    return (
-                      <tr key={index}>
-                          <td>{key}</td>
-                          <td>{value}</td>
-                      </tr>
-                    )
-                  })
+                  Object.entries(boardMock).map(([key, value], index) => (
+                    <tr key={index}>
+                      <td>{key}</td>
+                      <td>{value}</td>
+                    </tr>
+                  ))
                 }
               </tbody>
-          </table>
+            </table>
+          </div>
         </Col>
-        <Col>{ticket !== null && <div>Stai servendo il ticket {ticket.number}</div>}</Col>
-        <Col></Col>
+        <Col>
+          <Display counter={props.counter} ticket={ticket} handleNextTicket={handleNextTicket}/>
+        </Col>
       </Row>
-      <Row className="justify-content-center">
-        <Button onClick={handleNextTicket}>CALL NEXT</Button>
-      </Row>      
-    </Container>   
+      <Row className="back-button-row">
+        <Button className="back-button" onClick={() => {props.handleReleaseCounter(props.counter.id, employeeId);}}>Back to counters</Button>
+      </Row>
+           
+    </Container> 
+  
   );
-// <Display counter={counter} ticket={ticket} handleNextTicket={handleNextTicket}/>
 }
 
 function Display(props){
@@ -81,10 +80,12 @@ function Display(props){
     <div className="display-container">
       <div className='display'>
         <div className="display-header">
-          <p>{counter ? `Counter ${counter.number}` : "Select a counter"}</p>
+          <p>{ticket ? `Current ticket:` : "Call the first ticket"}</p>
         </div>
         {counter && <div className="display-body">
-          <h2>{ ticket ? `${ticket.number}` : "AVAILABLE" }</h2>
+          <h2>{ticket === null ? "AVAILABLE"
+            : ticket.id === undefined ? "NO TICKETS IN QUEUE" : ticket.number}
+            </h2>
         </div>}
       </div>
       { counter && <button onClick={handleNextTicket}>Call next</button> }

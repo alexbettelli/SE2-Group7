@@ -63,13 +63,13 @@ const closeTicket = (ticket_Id) => {
 //SERVICES
 const getAllServices = () => {
   return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM Service;'
+    const query = 'SELECT id, name, tag, average_time FROM Service;'
     db.all(query, (err, rows) => {
       if(err) return reject(err);
       const services = rows.map(row => new Service(
         row.id,
-        row.name,
-        row.tag,
+        row.tag,           
+        row.name,          
         row.average_time
       ))
       resolve(services);
@@ -167,5 +167,17 @@ const selectCounter = (counterId, employeeId) => {
   });
 }
 
-const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket, createTicket, getTicket, selectCounter}
+const releaseCounter = (counterId, employeeId) => {
+  return new Promise((resolve, reject) => {
+    db.run(`
+      DELETE FROM EmployeeAssignment
+      WHERE counter_id = ? AND employee_id = ?
+    `, [counterId, employeeId], function(err) {
+      if(err) return reject(err);
+      resolve();
+    });
+  });
+}
+
+const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket, createTicket, getTicket, selectCounter, releaseCounter}
 export default DAO;

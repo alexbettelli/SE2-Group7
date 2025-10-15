@@ -6,7 +6,7 @@ function Ticket(props){
     <div className="ticket">
       <h2>TICKET BOOKED</h2>
       <div className="ticket-number">
-        <h4>TICKET NUMBER</h4>
+        <h4>YOUR NUMBER</h4>
         <p>{props.ticket.number}</p>
       </div>
       <div className="ticket-time">

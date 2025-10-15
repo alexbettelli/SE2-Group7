@@ -10,7 +10,7 @@ function NavbarSE () {
         </div>
         <div className="navbar-menu">
           <a href="/" className="navbar-item">Home</a>
-          <a href="/info" className="navbar-item">Information</a>
+          <a className="navbar-item">Information</a>
         </div>
       </div>
     </nav>
