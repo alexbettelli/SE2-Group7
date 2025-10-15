@@ -1,10 +1,8 @@
 import { selectCounter } from '../API/API.mjs';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 
-function CounterList({ counters, setSelectedCounter }) {
+function CounterList({ counters, setSelectedCounter, refreshCounters }) {
   const [selectedCounter, setSelectedCounterState] = useState(null);
-  const navigate = useNavigate();
 
   const handleCounterSelect = async (counter) => {
     try {
@@ -14,7 +12,7 @@ function CounterList({ counters, setSelectedCounter }) {
       setSelectedCounterState(counter);
       setSelectedCounter(counter);
       console.log('Selected counter:', counter);
-      navigate('/counter-display', { state: { counter } });
+      if (refreshCounters) await refreshCounters();
     } catch (error) {
       console.error('Failed to select counter:', error);
       alert('Failed to select counter. Please try again.');
