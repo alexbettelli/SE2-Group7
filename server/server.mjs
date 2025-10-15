@@ -119,6 +119,26 @@ app.post('/api/counters/:id/select', async (req, res) => {
         res.status(500).json({error: 'Internal server error'});
     }
 })
+
+app.post('/api/counters/:id/release', async (req, res) => {
+    try {
+        const counterId = parseInt(req.params.id);
+        const { employeeId } = req.body;
+
+        if (!employeeId) {
+            return res.status(400).json({error: 'Employee ID is required'});
+        }
+
+        const result = await DAO.releaseCounter(counterId, employeeId);
+        console.log("releasing counter:", counterId, employeeId);
+        
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error releasing counter:', error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+})
+
 //API for selectNextCustomer
 app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
     try {
@@ -133,14 +153,17 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
         //retrive services assigned to the counter
         const serviceIDs = await DAO.getServicesAssignedToCounter(counterID);
         const ticket = queues.getNextTicket(serviceIDs); // ticket is an obj {customerID, ticketID}
-        
+
+        console.log("ticket:", ticket); // <-- verifica che ticket esista   
+             
         if (!ticket) {
             return res.status(200).json({ message: 'No tickets in queue' });
         }
         //retrive ticket info from db
         const ticketInfo = await DAO.getTicket(ticket.ticketID);
         //await DAO.assignTicketToCounter(ticket.ticketID, counterID);
-        
+        console.log("ticket",ticketInfo);
+        console.log("Aiuto");
         return res.status(200).json({
             ...ticketInfo,
             customerID: ticket.customerID

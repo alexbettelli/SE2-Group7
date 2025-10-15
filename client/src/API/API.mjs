@@ -103,6 +103,29 @@ export const selectCounter = async (counterId, employeeId) => {
   }
 }
 
+export const releaseCounter = async (counterId, employeeId) => {
+  try {
+    const response = await fetch(`${SERVER_URL}/api/counters/${counterId}/release`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ employeeId })
+    });
+    
+    await response.json();
 
-const API = { getServices, addCustomerToQueue, getNextTicket, getCounters, selectCounter };
+    if (!response.ok) {
+      throw new Error(data.error);
+    }
+
+    console.log('Counter released:', data);
+    return;
+  } catch(error) {
+    console.error("Error releasing counter:", error);
+    throw error;
+  }
+}
+
+const API = { getServices, addCustomerToQueue, getNextTicket, getCounters, selectCounter, releaseCounter }; 
 export default API

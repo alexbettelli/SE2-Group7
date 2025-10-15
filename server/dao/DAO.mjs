@@ -167,5 +167,17 @@ const selectCounter = (counterId, employeeId) => {
   });
 }
 
-const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket, createTicket, getTicket, selectCounter}
+const releaseCounter = (counterId, employeeId) => {
+  return new Promise((resolve, reject) => {
+    db.run(`
+      DELETE FROM EmployeeAssignment
+      WHERE counter_id = ? AND employee_id = ?
+    `, [counterId, employeeId], function(err) {
+      if(err) return reject(err);
+      resolve();
+    });
+  });
+}
+
+const DAO = {getAllServices, getServicesAssignedToCounter, getAllCounters, closeTicket, createTicket, getTicket, selectCounter, releaseCounter}
 export default DAO;
