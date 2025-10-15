@@ -4,6 +4,7 @@ import {useState} from 'react';
 import { getNextTicket } from '../API/API.mjs';
 import '../style/Employee.css';
 import '../style/Board.css';
+import '../style/Counter.css';
 
 
 function Counter(props) {

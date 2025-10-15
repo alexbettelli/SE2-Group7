@@ -1,4 +1,3 @@
-/* Global reset for full width */
 * {
   box-sizing: border-box;
 }
@@ -34,9 +33,7 @@ body {
 
 .page-title {
   text-align: center;
-  /* Reduce bottom spacing under title */
   margin-bottom: 1.5rem;
-  /* Push the title further down */
   margin-top: 1.5rem;
   color: #1e40af;
 }
@@ -64,17 +61,14 @@ body {
   cursor: pointer;
 }
 
-/* Role selection buttons container */
 .home-role-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   max-width: 600px;
-  /* Reduce top margin above the buttons */
   margin: 1rem auto 0 auto;
 }
 
-/* Role buttons */
 .role-btn {
   padding: 1.25rem 1.5rem;
   border-radius: 12px;
