@@ -23,7 +23,7 @@ function HomePage (props) {
       <div className="main-content">
         <div className="page-title">
           <h1>Queue System</h1>
-          <p>Monitor current numbers and wait times</p>
+          <p>Monitor current tickets and waiting times</p>
         </div>
 
         <div className="home-role-buttons">
