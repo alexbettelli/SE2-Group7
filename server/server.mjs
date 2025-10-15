@@ -131,7 +131,7 @@ app.post('/api/counters/:id/release', async (req, res) => {
 
         const result = await DAO.releaseCounter(counterId, employeeId);
         console.log("releasing counter:", counterId, employeeId);
-        
+
         res.status(200).json(result);
     } catch (error) {
         console.error('Error releasing counter:', error);
@@ -154,7 +154,6 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
         const serviceIDs = await DAO.getServicesAssignedToCounter(counterID);
         const ticket = queues.getNextTicket(serviceIDs); // ticket is an obj {customerID, ticketID}
 
-        console.log("ticket:", ticket); // <-- verifica che ticket esista   
              
         if (!ticket) {
             return res.status(200).json({ message: 'No tickets in queue' });
@@ -162,8 +161,6 @@ app.post('/api/counter/:counterID/next/:previousTicketId', async(req, res) => {
         //retrive ticket info from db
         const ticketInfo = await DAO.getTicket(ticket.ticketID);
         //await DAO.assignTicketToCounter(ticket.ticketID, counterID);
-        console.log("ticket",ticketInfo);
-        console.log("Aiuto");
         return res.status(200).json({
             ...ticketInfo,
             customerID: ticket.customerID
