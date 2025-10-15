@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.mjs",
     "dev": "nodemon server.mjs",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "init-db": "node init-db.js"
   },
   "author": "",
   "license": "ISC",

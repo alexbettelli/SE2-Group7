@@ -8,6 +8,13 @@ cd server && npm install
 cd client && npm install
 ```
 
+**Initialize the database (first time only):**
+```bash
+cd server
+npm run init-db
+```
+
+
 ## Run
 
 **Server:**
