@@ -34,10 +34,11 @@ function EmployeePage() {
   return (
     <div className='employee-container'>
       <div className='employee-controls'/>
-
-      <CounterList counters={counters} setSelectedCounter={handleCounterSelect} refreshCounters={refreshCounters}/>
-
-      <Counter counter={selectedCounter}/>
+      {
+        selectedCounter === null 
+        ? <CounterList counters={counters} setSelectedCounter={handleCounterSelect} refreshCounters={refreshCounters}/>
+        : <Counter counter={selectedCounter} setSelectedCounter={setSelectedCounter}/>
+      }
     </div>
   );
 }
