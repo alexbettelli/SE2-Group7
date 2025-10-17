@@ -16,7 +16,7 @@ sections:
 - Total points committed vs. done 
 - Nr of hours planned vs. spent (as a team)
 
-**Remember**a story is done ONLY if it fits the Definition of Done:
+**Remember** a story is done ONLY if it fits the Definition of Done:
  
 - Unit Tests passing
 - Code review completed
@@ -29,8 +29,9 @@ sections:
 
 | Story  | # Tasks | Points | Hours est. | Hours actual |
 |--------|---------|--------|------------|--------------|
-| _Uncategorized_   |         |       |            |              |
-| n      |         |        |            |              |  
+| _Uncategorized_   |  14  |      |  46h 30m  | 45h 4m |
+| Get ticket      | 2 | 5  | 3h 30m | 4h 15m |
+| Next Customer | 5 | 8 | 12h | 12h 45m  |
 
 > story `Uncategorized` is for technical tasks, leave out story points (not applicable in this case)
 
